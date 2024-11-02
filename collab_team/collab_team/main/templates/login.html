@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="welcome-section">
+    <h1 class="three-d-text">{% if LANGUAGE_CODE == 'ru' %}Авторизоваться{% else %}Login{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit"><span>{% if LANGUAGE_CODE == 'ru' %}Авторизоваться{% else %}Login{% endif %}</span></button>
+        <a href="{% url 'register' %}" class="button_link">
+            <span>{% if LANGUAGE_CODE == 'ru' %}Зарегистрироваться{% else %}SignUp{% endif %}</span>
+        </a>
+    </form>
+</div>
+{% endblock %}

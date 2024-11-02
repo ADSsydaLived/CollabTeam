@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Collab Team{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    {% block header %}
+    <nav class="three-d-text">
+        <a href="{% url 'home' %}" style="font-size: 0.7em;">{% if LANGUAGE_CODE == 'ru' %}Главная{% else %}Home{% endif %}</a>
+        {% if not request.resolver_match.url_name == 'login' and not request.resolver_match.url_name == 'register' %}
+            |
+            <a href="{% url 'add_project' %}" style="font-size: 0.7em;">{% if LANGUAGE_CODE == 'ru' %}Создать проект{% else %}Add Project{% endif %}</a> |
+            {% if user.is_authenticated %}
+                <a href="#" onclick="document.getElementById('logout-form').submit();" class="logout-link">{% if LANGUAGE_CODE == 'ru' %}Выйти{% else %}Logout{% endif %}</a>
+                <form id="logout-form" action="{% url 'logout' %}" method="POST" style="display: none;">
+                    {% csrf_token %}
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" style="font-size: 0.7em;">{% if LANGUAGE_CODE == 'ru' %}Авторизоваться{% else %}Login{% endif %}</a>
+            {% endif %}
+        {% endif %}
+    </nav>
+    {% endblock %}
+</header>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+<div class="language-selector">
+    <form method="post" action="{% url 'set_language' %}" id="languageForm">
+        {% csrf_token %}
+        <input type="hidden" name="language" id="languageInput" value="ru">
+        <img src="{% static 'img/flags/ru.webp' %}" alt="Русский" title="Русский" class="language-option" onclick="changeLanguage('ru')">
+        <img src="{% static 'img/flags/en.webp' %}" alt="English" title="English" class="language-option" onclick="changeLanguage('en')">
+    </form>
+</div>
+<script src="{% static 'js/script.js' %}"></script>
+<script>
+    function changeLanguage(lang) {
+        document.cookie = "django_language=" + lang + "; path=/"; // Установка куки
+        location.reload(); // Перезагрузить страницу
+    }
+</script>
+</body>
+</html>

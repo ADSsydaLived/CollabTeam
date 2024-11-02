@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!--<h2 class="three-d-text" style="text-align: center;">Список проектов</h2>
+    <div class="project-list">
+        {% if projects %}
+            {% for project in projects %}
+                <div class="project-item">
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.description }}</p>
+                    <img src="{{ project.cover_image.url }}" alt="{{ project.title }}">
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="project-item">У вас нет созданных проектов.</div>
+        {% endif %}
+    </div> -->
+<!--Другой вид -->
+    <h2 class="three-d-text" style="text-align: center;">{{ translations.list_of_projects }}</h2>
+    <form method="GET" action="{% url 'project_list' %}" class="search-form">
+        <input type="text" name="q" placeholder="{{ translations.search_placeholder }}" value="{{ query|default_if_none:'' }}">
+        <button type="submit" style="max-width: 100px;"><span>{{ translations.search_button }}</span></button>
+    </form>
+    <div class="projects-grid">
+        {% for project in page_obj %}
+            <div class="project-card create-project-form" style="max-width: 600px;
+    margin: 10px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    height: 100%;">
+                <a href="{% url 'project_detail' project.id %}" style="text-decoration: none;">
+                    <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" style="width: 60px; height: 60px;">
+                    <h2>{{ project.title }}</h2>
+                    <p><strong>{{ translations.author_name }}</strong> {{ project.author.username }}</p>
+                    <p>{{ project.description }}</p>
+                </a>
+            </div>
+        {% empty %}
+            <p>{{ translations.no_projects }}</p>
+        {% endfor %}
+    </div>
+
+    <div class="pagination" style="max-width: 150px; margin: 10px auto; padding: 10px; background-color: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); height: 100%; text-align: center; align-items: center;">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"><span><-</span></a>
+        {% endif %}
+
+        <span>{{ page_obj.number }} {{ translations.of_pretext }} {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"><span>-></span></a>
+        {% endif %}
+    </div>
+{% endblock %}

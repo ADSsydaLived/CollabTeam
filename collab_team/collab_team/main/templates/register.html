@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% csrf_token %}
+{% block content %}
+  <div class="welcome-section">
+    <h2 class="three-d-text">{% if LANGUAGE_CODE == 'ru' %}Регистрация{% else %}Registration{% endif %}</h2>
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="form-group">
+        {{ form.username.label_tag }} <!-- Имя пользователя -->
+        {{ form.username }}
+      </div>
+
+      <div class="form-group">
+        {{ form.password1.label_tag }} <!-- Первое поле пароля -->
+        {{ form.password1 }}
+        <div id="password-hints" class="password-hints" style="display:none;">
+          <ul>
+            <li>{% if LANGUAGE_CODE == 'ru' %}Минимум 8 символов{% else %}At least 8 characters{% endif %}</li>
+            <li>{% if LANGUAGE_CODE == 'ru' %}Должен содержать буквы и цифры{% else %}Must contain letters and numbers{% endif %}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-group">
+        {{ form.password2.label_tag }} <!-- Подтверждение пароля -->
+        {{ form.password2 }}
+      </div>
+
+      <button type="submit"><span>{% if LANGUAGE_CODE == 'ru' %}Зарегистрироваться{% else %}Sign Up{% endif %}</span></button>
+    </form>
+
+    <p>{% if LANGUAGE_CODE == 'ru' %}Уже зарегистрированы?{% else %}Already registered?{% endif %}
+      <a href="{% url 'login' %}">{% if LANGUAGE_CODE == 'ru' %}Авторизоваться{% else %}Login{% endif %}</a>
+    </p>
+  </div>
+{% endblock %}

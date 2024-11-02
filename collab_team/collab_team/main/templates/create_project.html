@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="create-project-container">
+    <h2 class="three-d-text">{{ translations.create_project }}</h2>
+    <form method="POST" enctype="multipart/form-data" class="create-project-form">
+      {% csrf_token %}
+      {{ form.title.label_tag }}  <!-- Заголовок для названия проекта -->
+      {{ form.title }}
+
+      {{ form.description.label_tag }}  <!-- Заголовок для описания проекта -->
+      {{ form.description }}  <!-- Поле для ввода описания -->
+
+      {{ form.cover_image.label_tag }}  <!-- Заголовок для загрузки изображения -->
+      {{ form.cover_image }}
+      <button type="submit"><span>{{ translations.submit_button }}</span></button>
+
+    </form>
+    <a href="{% url 'project_list' %}" class="button_link"><span>{{ translations.list_of_projects }}</span></a>
+  </div>
+
+{% endblock %}
